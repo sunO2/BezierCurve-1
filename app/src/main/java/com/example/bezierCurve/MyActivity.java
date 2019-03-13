@@ -26,7 +26,7 @@ public class MyActivity extends Activity {
     private PagerFactory pagerFactory;
     private Bitmap currentBitmap, mCurPageBitmap, mNextPageBitmap;
     private Canvas mCurPageCanvas, mNextPageCanvas;
-    private static final String[] pages = {"one", "two", "three"};
+    private static final String[] pages = {"one","two"};
     private int screenWidth;
     private int screenHeight;
     private Bitmap mYbitmap;
@@ -88,47 +88,17 @@ public class MyActivity extends Activity {
 
         pager.setBitmaps(mCurPageBitmap, mCurPageBitmap);
         loadImage(mCurPageCanvas, 0);
+        loadImage(mNextPageCanvas, 1);
 
         pager.setOnTouchListener(new View.OnTouchListener() {
-
-            private int count = pages.length;
-            private int currentIndex = 0;
-            private int lastIndex = 0;
-            private Bitmap lastBitmap = null;
 
             @Override
             public boolean onTouch(View v, MotionEvent e) {
                 boolean ret = false;
                 if (v == pager) {
                     if (e.getAction() == MotionEvent.ACTION_DOWN) {
-                        pager.calcCornerXY(e.getX(), e.getY());
-
                         startAnimation(v,pager);
-                        lastBitmap = currentBitmap;
-                        lastIndex = currentIndex;
-
-                        pagerFactory.onDraw(mCurPageCanvas, currentBitmap);
-                        if (pager.DragToRight()) {    // 向右滑动，显示前一页
-                            if (currentIndex == 0) return false;
-                            pager.abortAnimation();
-                            currentIndex--;
-                            loadImage(mNextPageCanvas, currentIndex);
-                        } else {        // 向左滑动，显示后一页
-                            if (currentIndex + 1 == count) return false;
-                            pager.abortAnimation();
-                            currentIndex++;
-                            loadImage(mNextPageCanvas, currentIndex);
-                        }
-                    } else if (e.getAction() == MotionEvent.ACTION_MOVE) {
-                        pager.doTouchXY(e.getX(),e.getY());
-                    } else if (e.getAction() == MotionEvent.ACTION_UP) {
-                        if (!pager.canDragOver()) {
-                            currentIndex = lastIndex;
-                            currentBitmap = lastBitmap;
-                        }
                     }
-
-                    ret = pager.doTouchEvent(e);
                     return ret;
                 }
                 return false;
@@ -136,12 +106,19 @@ public class MyActivity extends Activity {
         });
     }
 
+    private static final int TIME = 4000;
+    private static final int WATING = 1000;
     /**
      * 开始动画
      */
     public void startAnimation(final View view, final Pager pager){
+
+
+
         PointF start = new PointF(view.getRight(),view.getBottom());
         PointF end = new PointF(-view.getRight(),-view.getBottom());
+
+        pager.calcCornerXY(start.x, start.y);
 
         ValueAnimator valueAnimator = ValueAnimator.ofObject(new TypeEvaluator<PointF>() {
             @Override
@@ -151,7 +128,7 @@ public class MyActivity extends Activity {
                 return new PointF(x,y);
             }
         },start,end);
-        valueAnimator.setDuration(3000);
+        valueAnimator.setDuration(TIME);
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -169,7 +146,7 @@ public class MyActivity extends Activity {
                     public void run() {
                         endAnimation(view,pager);
                     }
-                },3000);
+                },WATING);
             }
         });
         valueAnimator.start();
@@ -190,7 +167,7 @@ public class MyActivity extends Activity {
                 return new PointF(x,y);
             }
         },start,end);
-        valueAnimator.setDuration(3000);
+        valueAnimator.setDuration(TIME);
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -205,7 +182,7 @@ public class MyActivity extends Activity {
 
     private void loadImage(final Canvas canvas, int index) {
         Bitmap bitmap = index == 0? mYbitmap:getBitmap(pages[index]);
-        currentBitmap = bitmap;
+//        currentBitmap = bitmap;
         pagerFactory.onDraw(canvas, bitmap);
         pager.setBitmaps(mCurPageBitmap, mNextPageBitmap);
         pager.postInvalidate();

@@ -272,21 +272,21 @@ public class Pager extends View {
 
 	/** 创建阴影的GradientDrawable */
 	private void createDrawable() {
-		int[] color = { 0x333333, 0xb0333333 };
+		int[] color = { 0xffffff, 0xb0ffffff };
 		mFolderShadowDrawableRL = new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, color);
 		mFolderShadowDrawableRL.setGradientType(GradientDrawable.LINEAR_GRADIENT);
 
 		mFolderShadowDrawableLR = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, color);
 		mFolderShadowDrawableLR.setGradientType(GradientDrawable.LINEAR_GRADIENT);
 
-		mBackShadowColors = new int[] { 0xff111111, 0x111111 };
+		mBackShadowColors = new int[] { 0xffffffff, 0xffffff };
 		mBackShadowDrawableRL = new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, mBackShadowColors);
 		mBackShadowDrawableRL.setGradientType(GradientDrawable.LINEAR_GRADIENT);
 
 		mBackShadowDrawableLR = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, mBackShadowColors);
 		mBackShadowDrawableLR.setGradientType(GradientDrawable.LINEAR_GRADIENT);
 
-		mFrontShadowColors = new int[] { 0x80111111, 0x111111 };
+		mFrontShadowColors = new int[] { 0x80ffffff, 0xffffff };
 		mFrontShadowDrawableVLR = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, mFrontShadowColors);
 		mFrontShadowDrawableVLR.setGradientType(GradientDrawable.LINEAR_GRADIENT);
 		mFrontShadowDrawableVRL = new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, mFrontShadowColors);
